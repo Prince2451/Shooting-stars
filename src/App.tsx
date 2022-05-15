@@ -1,45 +1,35 @@
-import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import random from "lodash/random";
+import { useMemo } from "react";
+import ShootingStars from "./components/ShootingStars";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const starsCords = useMemo(() => {
+    const stars = 200;
+    const cords: Array<{ top: number; left: number; opacity: number }> = [];
+    for (let i = 0; i < stars; i++) {
+      cords.push({
+        top: random(2, window.innerHeight),
+        left: random(2, window.innerWidth),
+        opacity: random(0.1, 1, true),
+      });
+    }
+    return cords;
+  }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
+    <div className="h-screen w-screen bg-[#0F0F10] relative overflow-hidden">
+      <ShootingStars />
+      {starsCords.map((starCord, i) => {
+        return (
+          <div
+            key={i}
+            style={{ ...starCord }}
+            className="text-xs w-0.5 h-0.5 rounded-full filter bg-white absolute"
+          ></div>
+        );
+      })}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
